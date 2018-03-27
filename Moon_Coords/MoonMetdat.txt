@@ -1,7 +1,0 @@
-\begindata
-KERNELS_TO_LOAD=(
-'./MetDat/naif0011.tls',
-'./MetDat/moon_pa_de421_1900-2050.bpc',
-'./MetDat/moon_080317.tf',
-'./MetDat/de421.bsp')
-\begintext

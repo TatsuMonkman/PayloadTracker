@@ -1,7 +1,8 @@
 
 
 def makesetup(t_file):
-    #From a TLE File, generates a setup file and returns setup file name
+    #This function generates a setup file from a TLE file (input) and returns setup file name (output)
+    #The setup file is formatted to be read into the SPICE mkspk utility
 
     #setup
     import spiceypy as spice
@@ -14,7 +15,6 @@ def makesetup(t_file):
     lines   = []
     with open(tle[0]) as f:
         lines = f.readlines()
-
     print '\n',lines[0][0:-1]+' TLE File:\n',lines[1],lines[2]
 
 

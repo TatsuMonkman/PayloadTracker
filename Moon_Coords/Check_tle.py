@@ -54,10 +54,10 @@ def makesetup(t_file):
                 + '\tREF_FRAME_NAME    = \'J2000\'\n'
                 + '\tTLE_START_PAD     = \'2 days\'\n'
                 + '\tTLE_STOP_PAD      = \'2 days\'\n'
-                + '\tLEAPSECONDS_FILE  = \'naif0011.tls\'\n'
+                + '\tLEAPSECONDS_FILE  = \'./MetDat/naif0011.tls\'\n'
                 + '\tINPUT_DATA_FILE   = \'' + tlefile + '\'\n'
                 + '\tOUTPUT_SPK_FILE   = \'' + setn + '.bsp\'\n'
-                + '\tPCK_FILE          = \'geophysical.ker\'\n'
+                + '\tPCK_FILE          = \'./MetDat/geophysical.ker\'\n'
                 + '\tSEGMENT_ID        = \'NOAA-14 TLE-based Trajectory\'\n'
                 + '\tPRODUCER_ID       = \'Tatsu the Intern, SFI\''
                 + '\n\n\\begintext\n\n'
@@ -69,10 +69,11 @@ def makesetup(t_file):
                 + '\tMinute            = ' + str(min) + '\n'
                 + '\tSecond            = ' + str(sec) + '\n'
                 + '\tTLE File          = ' + str(tlefile) + '\n'
-                + '\tJD(sec past J2000)= ' + str(get[0]) + '\n\n')
+                + '\tJD(sec past J2000)= ' + str(get[0]) + '\n'
+                + '\tSPK Filename      = ' + setn + '.bsp' + '\n')
 
     print('Setup file named ' + setn + '_setup.txt')
 
     return setn + '_setup.txt'
 
-print makesetup('testtle.tle')
+makesetup('testtle.tle')

@@ -18,7 +18,7 @@ spice.furnsh("./" + date + "_" + spacecraft + ".bsp") #SPK file made by setup, s
 
 et = spice.utc2et("March 26, 2018 16:00:00")
 
-#print et
+#print
 
 state = spice.spkezr("-128485",et,"MOON_PA", "LT+S","Moon")
 print 'Spacecraft:'
@@ -35,6 +35,7 @@ print selen[2]*180/math.pi
 
 state = spice.spkezr("Earth",et,"MOON_PA", "LT+S","Moon")
 print '\nEarth:'
+
 #print state[0][0:3]
 #print state
 selen = spice.reclat(state[0][0:3])
@@ -43,6 +44,7 @@ print selen[2]*180/math.pi
 
 state = spice.spkezr("Sun",et,"MOON_PA", "LT+S","Moon")
 print '\nSun:'
+
 #print state[0][0:3]
 #print state
 selen = spice.reclat(state[0][0:3])

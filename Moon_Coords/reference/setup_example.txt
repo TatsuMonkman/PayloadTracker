@@ -1,0 +1,36 @@
+\begindata
+
+   INPUT_DATA_TYPE   = 'TL_ELEMENTS'
+   OUTPUT_SPK_TYPE   = 10
+   TLE_INPUT_OBJ_ID  = 28485
+   TLE_SPK_OBJ_ID    = -128485
+   CENTER_ID         = 399
+   REF_FRAME_NAME    = 'J2000'
+   TLE_START_PAD     = '2 days'
+   TLE_STOP_PAD      = '2 days'
+   LEAPSECONDS_FILE  = 'naif0011.tls'
+   INPUT_DATA_FILE   = '18085_SWIFT.tle'
+   OUTPUT_SPK_FILE   = 'date_spacecraft.bsp'
+   PCK_FILE          = 'geophysical.ker'
+   SEGMENT_ID        = 'NOAA-14 TLE-based Trajectory'
+   PRODUCER_ID       = 'Tatsu the Intern, SFI'
+
+\begintext
+
+This is the setup file that is fed into mkspk to generate an SPK file
+Argument descriptions are as follows:
+
+   INPUT_DATA_TYPE   = 'TL_ELEMENTS' #DONT CHANGE.........File format for observer ephemeris (Two-line element files for Earth-orbiting spacecraft)
+   OUTPUT_SPK_TYPE   = 10            #DONT CHANGE.........SPK file format for Earth-orbiting satellites
+   TLE_INPUT_OBJ_ID  = 28485         #EXTRACT FROM TLE....code of the object to look for in input TLE file (NORAD satellite number)
+   TLE_SPK_OBJ_ID    = -128485       #EXTRACT FROM TLE....NAIF ID to use in the output TLE-based SPK file (used NASA codes, but can be arbitrary during implementation)
+   CENTER_ID         = 399           #DONT CHANGE.........Earth Spice Numeric ID: Numeric code assigned to the body which is the center of motion for the object (Earth in this case)
+   REF_FRAME_NAME    = 'J2000'       #DONT CHANGE.........Reference frame name
+   TLE_START_PAD     = '2 days'      #DONT CHANGE.........Start range of orbit integration time (SGP4)
+   TLE_STOP_PAD      = '2 days'      #DONT CHANGE.........End range of orbit integration time (SGP4)
+   LEAPSECONDS_FILE  = 'naif0011.tls'#DONT CHANGE.........File for computing datetime offsets
+   INPUT_DATA_FILE   = 'testtle.tle' #TLE FILE NAME.......
+   OUTPUT_SPK_FILE   = 'testtle.bsp' #OUTPUT NAME.........
+   PCK_FILE          = 'geophysical.ker' #DONT CHANGE.....File containing geophysical constants for central body
+   SEGMENT_ID        = 'SWIFT'       #EXTRACT FROM TLE....
+   PRODUCER_ID       = 'Tatsu the Intern, SFI' #DONT CHANGE

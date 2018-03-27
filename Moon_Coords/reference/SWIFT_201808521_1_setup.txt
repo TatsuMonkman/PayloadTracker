@@ -1,0 +1,30 @@
+\begindata
+
+	INPUT_DATA_TYPE   = 'TL_ELEMENTS'
+	OUTPUT_SPK_TYPE   = 10
+	TLE_INPUT_OBJ_ID  = 28485
+	TLE_SPK_OBJ_ID    = -128485
+	CENTER_ID         = 399
+	REF_FRAME_NAME    = 'J2000'
+	TLE_START_PAD     = '2 days'
+	TLE_STOP_PAD      = '2 days'
+	LEAPSECONDS_FILE  = 'naif0011.tls'
+	INPUT_DATA_FILE   = '18085_SWIFT.tle'
+	OUTPUT_SPK_FILE   = 'SWIFT_201808521_1.bsp'
+	PCK_FILE          = 'geophysical.ker'
+	SEGMENT_ID        = 'NOAA-14 TLE-based Trajectory'
+	PRODUCER_ID       = 'Tatsu the Intern, SFI'
+
+\begintext
+
+	Observation info:
+
+	Spacecraft        = SWIFT
+	Year              = 2018
+	Day               = 085
+	Hour              = 21
+	Minute            = 46
+	Second            = 7.247712
+	TLE File          = 18085_SWIFT.tle
+	JD(sec past J2000)= 575372835.433
+

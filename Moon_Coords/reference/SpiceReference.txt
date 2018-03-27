@@ -1,0 +1,15 @@
+Some helpful references for running Spiceypy (Python wrapper for NASA NAIF's "SPICE" information system)
+
+Spicepy Python Wrapper Github: https://github.com/AndrewAnnex/SpiceyPy
+
+Module Information: http://spiceypy.readthedocs.io/en/master/documentation.html
+  utc2et: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/utc2et_c.html
+  spkezr: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkaps_c.html
+  reclat: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/reclat_c.html
+
+Making an SPK:
+  spkopn: ftp://naif.jpl.nasa.gov/pub/naif/toolkit_docs/FORTRAN/spicelib/spkopn.html
+  Position center: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/FORTRAN/req/naif_ids.html#Earth%20Orbiting%20Spacecraft.
+  NAIF Integer ID Codes: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html
+
+1 23455U 94089A   94364.46369541 -.00000019  00000-0  00000+0 0    17

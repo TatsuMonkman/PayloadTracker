@@ -3,50 +3,49 @@
 #This script needs to know the TLE_SPK_OBJ_ID and SPK file of the spacecraft
 #Need to double check some units...
 
-import spiceypy as spice
-import numpy as np
-import math
+def Calculate_SCoords(run):
 
-date = "18085" #from getelm?
-spacecraft = "SWIFT"
-time = "March 26, 2018 16:00:00"
+    #setup
+    import spiceypy as spice
+    import numpy as np
+    import math
+    spice.furnsh("./MetDat/MoonMetdat.txt")
 
-spice.furnsh("./MetDat/MoonMetdat.txt") #Constant for all iterations
-spice.furnsh("./" + date + "_" + spacecraft + ".bsp") #SPK file made by setup, should add datetime and name to file name
+    #import ~_setup.txt and SPK (~.bsp) file
+    slines = []
+    with open(run + '_setup.txt') as f:
+        slines = f.read().splitlines()
+    spice.furnsh(run + '.bsp')
 
-#define variables
+    #get TLE_SPK_OBJ_ID and et (time, seconds past J2000) from TLE File
+    obj_id = slines[5].split('=')[1]
+    et     = float(slines[28].split('=')[1])
+    print ''
+    print '\n', spice.et2utc(et, 'C', 3)
 
-et = spice.utc2et("March 26, 2018 16:00:00")
+    #Calculate sub-observer point
+    state = spice.spkezr(obj_id , et , "MOON_PA" , "LT+S" , "Moon")
+    s_obs = spice.reclat(state[0][0:3])
+    print '\nSub-Observer Point:'
+    print 'slong: ', s_obs[1] * 180 / math.pi
+    print 'slat:  ', s_obs[2] * 180 / math.pi
 
-#print
+    #Calculate sub-Earth point
+    state = spice.spkezr("Earth",et,"MOON_PA", "LT+S","Moon")
+    s_eat = spice.reclat(state[0][0:3])
+    print '\nSub-Earth Point:'
+    print 'slong: ', s_eat[1] * 180 / math.pi
+    print 'slat:  ', s_eat[2] * 180 / math.pi
 
-state = spice.spkezr("-128485",et,"MOON_PA", "LT+S","Moon")
-print 'Spacecraft:'
-#print state[0][0:3]
-#print state
-selen = spice.reclat(state[0][0:3])
-print selen[1]*180/math.pi
-print selen[2]*180/math.pi
+    #Calculate sub-Sun point
+    state = spice.spkezr("Sun",et,"MOON_PA", "LT+S","Moon")
+    s_sun = spice.reclat(state[0][0:3])
+    print '\nSub-Sun Point:'
+    print 'slong: ', 90 - s_sun[1] * 180 / math.pi
+    print 'slat:  ', s_sun[2] * 180 / math.pi, '\n'
+
+    return [slines[21].split('=')[1][1:], et, s_obs, s_eat, s_sun]
 
 
-#print spice.kinfo("./testtle.bsp")
 
-#print et
-
-state = spice.spkezr("Earth",et,"MOON_PA", "LT+S","Moon")
-print '\nEarth:'
-
-#print state[0][0:3]
-#print state
-selen = spice.reclat(state[0][0:3])
-print selen[1]*180/math.pi
-print selen[2]*180/math.pi
-
-state = spice.spkezr("Sun",et,"MOON_PA", "LT+S","Moon")
-print '\nSun:'
-
-#print state[0][0:3]
-#print state
-selen = spice.reclat(state[0][0:3])
-print 90-selen[1]*180/math.pi
-print selen[2]*180/math.pi
+#print Calculate_SCoords('SWIFT_201808521_1')

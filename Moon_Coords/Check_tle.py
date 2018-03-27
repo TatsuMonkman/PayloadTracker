@@ -69,11 +69,11 @@ def makesetup(t_file):
                 + '\tMinute            = ' + str(min) + '\n'
                 + '\tSecond            = ' + str(sec) + '\n'
                 + '\tTLE File          = ' + str(tlefile) + '\n'
-                + '\tJD(sec past J2000)= ' + str(get[0]) + '\n'
+                + '\tJD(secpast J2000) = ' + str(get[0]) + '\n'
                 + '\tSPK Filename      = ' + setn + '.bsp' + '\n')
 
-    print('Setup file named ' + setn + '_setup.txt')
+    print('Created setup file named ' + setn + '_setup.txt')
 
-    return setn + '_setup.txt'
+    return [setn, setn + '_setup.txt', setn + '.bsp']
 
-makesetup('testtle.tle')
+#print makesetup('testtle.tle')

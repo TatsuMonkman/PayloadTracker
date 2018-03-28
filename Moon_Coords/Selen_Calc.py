@@ -21,7 +21,7 @@ def Calculate_SCoords(run):
     obj_id = slines[5].split('=')[1]
     et     = float(slines[28].split('=')[1])
     print ''
-    print '\n', spice.et2utc(et, 'C', 3)
+    print '\n', spice.et2utc(et, 'C', 3) #read out date as yyyy mmm dd hr:min:sec.millisecond
 
     #Calculate sub-observer point
     state = spice.spkezr(obj_id , et , "MOON_PA" , "LT+S" , "Moon")
@@ -43,6 +43,19 @@ def Calculate_SCoords(run):
     print '\nSub-Sun Point:'
     print 'slong: ', 90 - s_sun[1] * 180 / math.pi
     print 'slat:  ', s_sun[2] * 180 / math.pi, '\n'
+
+    with open(run + '_spoints.txt', 'w') as f:
+        f.write(''
+                + '\nSub-Observer Point:'
+                + '\n\tslong: ' + str(s_obs[1] * 180 / math.pi)
+                + '\n\tslat: ' + str(s_obs[2] * 180 / math.pi)
+                + '\n\nSub-Earth Point:'
+                + '\n\tslong: ' + str(s_eat[1] * 180 / math.pi)
+                + '\n\tslat: ' + str(s_eat[2] * 180 / math.pi)
+                + '\n\nSub-Sun Point:'
+                + '\n\tslong: ' + str(90 - s_sun[1] * 180 / math.pi)
+                + '\n\tslat: ' + str(s_sun[2] * 180 / math.pi)
+        )
 
     return [slines[21].split('=')[1][1:], et, s_obs, s_eat, s_sun]
 

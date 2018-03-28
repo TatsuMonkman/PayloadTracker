@@ -19,7 +19,7 @@ def makesetup(t_file):
 
 
     #Extract date of observation
-    year   = '19'+lines[1][18:20]
+    year   = '20'+lines[1][18:20]
     day    = lines[1][20:23]
     subday = lines[1][23:32]
     hour   = int(float(subday)*24) #find hour, round down. When naming files all files from same hour will be labeled in the order they were taken

@@ -1,6 +1,6 @@
 #Lunar Disk Irradiance Calculator
 
-def disk_eradiance(date, o_slon, o_slat, s_slat):
+def disk_e(date, phase, o_slon, o_slat, s_slon, band):
 
     #Here we go...
     import math
@@ -8,10 +8,10 @@ def disk_eradiance(date, o_slon, o_slat, s_slat):
     from PyAstronomy import pyasl
 
     #Determine Lunar Phase
-    day_date = date / (3600*24)
+    day_date = date / (3600*24) #pyasl wants it in days.....
     mp = pyasl.moonphase(day_date) #date in Julian Date days past epoch
 #    print mp[0]*180
-    mp = -51.03/180 #test value from USGS presentation
+    mp = phase * math.pi / (180) #test value from USGS presentation
 
     #Lunar model constants
     c1 = 0.00034115
@@ -24,16 +24,16 @@ def disk_eradiance(date, o_slon, o_slat, s_slat):
     p4 = 16.7492
 
     slines = []
-    with open('LIMCOEFF_Test.txt', 'r') as f:
+    with open('LIMCOEFF.txt', 'r') as f:
         slines = f.readlines()
     for i in range(len(slines)):
         slines[i] = slines[i].split('\t')
 
 #    print slines[5]
-    i = 31 #Which wavelength row
+    i =  band #Which wavelength row
 
     #Spectral Coefficients
-    wl = 350 #Wavelength (nm)
+    wl = float(slines[i][0]) #Wavelength (nm)
     a0 = float(slines[i][1]) # 1, Constant
     a1 = float(slines[i][2]) # g, Phase 1 (rad^-1)
     a2 = float(slines[i][3]) # g2, Phase 2 (rad^-2)
@@ -49,7 +49,7 @@ def disk_eradiance(date, o_slon, o_slat, s_slat):
     g = mp #Absolute phase angle
     theta = o_slat * math.pi / (180 ) #selenographic latitude of sub-observer point, degs to rads
     phi = o_slon * math.pi / (180 ) #Selenographic longitude of sub-observer point, degs to rads
-    PHI = s_slat * math.pi / (180 ) #Selenographic longitude of the Sun, degs to rads
+    PHI = s_slon * math.pi / (180 ) #Selenographic longitude of the Sun, degs to rads
 
     def diskequiv(C1, C2, C3, C4, P1, P2, P3, P4, WL, A0,
                   A1, A2, A3, B1, B2, B3, D1, D2, D3, G,
@@ -62,12 +62,15 @@ def disk_eradiance(date, o_slon, o_slat, s_slat):
 
                   return float(asum + bsum + csum + dsum)
 
-    AK = diskequiv(c1, c2, c3, c4, p1, p2, p3, p4, wl, a0,
+    Ak = diskequiv(c1, c2, c3, c4, p1, p2, p3, p4, wl, a0,
                              a1, a2, a3, b1, b2, b3, d1, d2, d3, g,
                              theta, phi, PHI)
-    print AK
-    print math.exp(AK)
+#    print(Ak)
+    print(wl, math.exp(Ak))
+#    print(c1, c2, c3, c4, p1, p2, p3, p4, wl, a0,
+#                             a1, a2, a3, b1, b2, b3, d1, d2, d3, g,
+#                             theta, phi, PHI)
+    return [wl, math.exp(Ak)]
 
-    return
-
-disk_eradiance(575372835.433, 4.328, 5.159, 1.488)
+#disk_e(575372835.433, 0, 0, 7, 22)
+#ef disk_eradiance(date, phase, o_slon, o_slat, s_slon):

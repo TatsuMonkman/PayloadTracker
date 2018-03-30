@@ -1,0 +1,12 @@
+
+Sub-Observer Point:
+	slong: 4.65299504069
+	slat: -3.90797498043
+
+Sub-Earth Point:
+	slong: 5.64372754074
+	slat: -4.19923711183
+
+Sub-Sun Point:
+	slong: 138.142529638
+	slat: -1.54623456723

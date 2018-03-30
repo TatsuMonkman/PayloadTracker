@@ -3,6 +3,7 @@ import Create_SPK
 import Selen_Calc
 import clean
 
+#Add tle file to cwd and enter name below
 tle = 'testtle.tle'
 
 setup = Check_tle.makesetup(tle)

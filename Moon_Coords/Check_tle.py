@@ -11,7 +11,7 @@ def makesetup(t_file):
 
     #read TLE File
     tlefile = t_file
-    tle     = [x for x in os.listdir('.') if x == (tlefile)] #find raw tle file in directory
+    tle     = [x for x in os.listdir('.') if x == (tlefile)] #find raw tle file in directory need to turn into t_file
     lines   = []
     with open(tle[0]) as f:
         lines = f.readlines()
@@ -28,11 +28,11 @@ def makesetup(t_file):
 
     #Format TLE file (need to get rid of \n at the end of each line string)
     lines[0] = lines[0][0:-1]
-    lines[1] = lines[1][0:-2]
-    lines[2] = lines[2][0:-2]
+    lines[1] = lines[1][0:-1]
+    lines[2] = lines[2][0:-1]
     tlelines = [lines[1],lines[2]]
 
-    get = spice.getelm(int(year), 138, tlelines) #getelm needs year of obs, length of the tle file (total)
+    get = spice.getelm(int(year), 138, tlelines) #getelm converts the TLE file into a Spice-readable array (?), needs year of obs, length of the tle file (total)
 
 
     #Pull TLE_INPUT_OBJ_ID, TLE_SPK_OBJ_ID, SEGMENT_ID from TLE File
@@ -76,4 +76,4 @@ def makesetup(t_file):
 
     return [setn, setn + '_setup.txt', setn + '.bsp']
 
-#print makesetup('testtle.tle')
+print makesetup('testtle.tle')

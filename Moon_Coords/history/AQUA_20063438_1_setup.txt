@@ -1,0 +1,30 @@
+\begindata
+
+	INPUT_DATA_TYPE   = 'TL_ELEMENTS'
+	OUTPUT_SPK_TYPE   = 10
+	TLE_INPUT_OBJ_ID  = 27424
+	TLE_SPK_OBJ_ID    = -127424
+	CENTER_ID         = 399
+	REF_FRAME_NAME    = 'J2000'
+	TLE_START_PAD     = '2 days'
+	TLE_STOP_PAD      = '2 days'
+	LEAPSECONDS_FILE  = './MetDat/naif0011.tls'
+	INPUT_DATA_FILE   = 'testtle.tle'
+	OUTPUT_SPK_FILE   = 'AQUA_20063438_1.bsp'
+	PCK_FILE          = './MetDat/geophysical.ker'
+	SEGMENT_ID        = 'NOAA-14 TLE-based Trajectory'
+	PRODUCER_ID       = 'Tatsu the Intern, SFI'
+
+\begintext
+
+	Observation info:
+
+	Spacecraft        = AQUA
+	Year              = 2006
+	Day               = 343
+	Hour              = 8
+	Minute            = 27
+	Second            = 50.999904
+	TLE File          = testtle.tle
+	JD(secpast J2000) = 218924936.183
+	SPK Filename      = AQUA_20063438_1.bsp

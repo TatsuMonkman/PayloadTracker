@@ -1,6 +1,6 @@
 #Lunar Disk Irradiance Calculator
 
-def disk_e(date, phase, o_slon, o_slat, s_slon, band):
+def lunar(date, phase, o_slon, o_slat, s_slon, band):
 
     #Here we go...
     import math
@@ -23,6 +23,7 @@ def disk_e(date, phase, o_slon, o_slat, s_slon, band):
     p3 = -30.5858
     p4 = 16.7492
 
+    #Read off wave-length-specific coefficients from LIMCOEFF data table
     slines = []
     with open('LIMCOEFF.txt', 'r') as f:
         slines = f.readlines()
@@ -32,7 +33,7 @@ def disk_e(date, phase, o_slon, o_slat, s_slon, band):
 #    print slines[5]
     i =  band #Which wavelength row
 
-    #Spectral Coefficients
+    #Spectral Coefficients, sorry I used lines instead of arrays..
     wl = float(slines[i][0]) #Wavelength (nm)
     a0 = float(slines[i][1]) # 1, Constant
     a1 = float(slines[i][2]) # g, Phase 1 (rad^-1)
@@ -65,11 +66,8 @@ def disk_e(date, phase, o_slon, o_slat, s_slon, band):
     Ak = diskequiv(c1, c2, c3, c4, p1, p2, p3, p4, wl, a0,
                              a1, a2, a3, b1, b2, b3, d1, d2, d3, g,
                              theta, phi, PHI)
-#    print(Ak)
-    print(wl, math.exp(Ak))
-#    print(c1, c2, c3, c4, p1, p2, p3, p4, wl, a0,
-#                             a1, a2, a3, b1, b2, b3, d1, d2, d3, g,
-#                             theta, phi, PHI)
+
+    print('Wavelength: ', wl, '\nReflectance: ', math.exp(Ak))
     return [wl, math.exp(Ak)]
 
 #disk_e(575372835.433, 0, 0, 7, 22)

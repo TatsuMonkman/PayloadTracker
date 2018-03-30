@@ -1,51 +1,42 @@
 import numpy as np
-import DiskE_Ref as lunar
-import matplotlib.pyplot as plt
+from DiskE_Ref import lunar
+from find_traps import make_traps
+from find_offset import offset
+from integrated import integrate
 
-
-
-
-def plot2darray1( a, x, y, ymin, ymax):
-    plt.plot()
-    plt.semilogy( a[:,0], a[:,1])
-#    plt.ylim( ymin, ymax)
-    plt.title('Implemented ROLO Model ' + y + ' vs ' + x)
-    plt.grid( True )
-    plt.xlabel( x )
-    plt.ylabel( y )
-    plt.show()
-    plt.close()
-
-def plot2darray2( a, x, y, ymin, ymax):
-    fig = plt.figure()
-    ax1 = fig.add_subplot(111)
-    ax1.semilogy(a[:,0], a[:,1], 'b')
-    ax1.semilogy(-a[:,0], a[:,1], 'b')
-    plt.title('Implemented ROLO Model ' + y + ' vs ' + x)
-    ax1.grid( True )
-    plt.xlabel( x )
-    plt.ylabel( y )
-
-    plt.show()
-
-print('rrr')
-for i in range(4,36):
-    lunar.disk_e(0, 54.490, 6.39, -4.29, 138.143, i)
-    #lunar.disk_(t, phase, oslon, olsat, sslat, wl)
-
-
+#run ROLO over all wavelengths for observation date, selenographic coordinates
 model = []
-print('hmmm')
 for j in range(4,36):
-    model.append(lunar.disk_e(0, 7, 0, 0, 7, j))
-    #lunar.disk_(t, phase, oslon, olsat, sslat, wl)
-m = np.asarray(model)
-plot2darray1(m, 'Wavelength (nm)', 'Reflectance',0.06,.7)
+    model.append(lunar(0, 7, 0, 0, 7, j)) #date(JD seconds), phase(deg), observer slon (deg), observer slat (deg), sun slat (deg)
+m3 = np.asarray(model)
+with open('ROLO_Results.txt','w') as f:
+    f.write('#Disk Reflectance Results\n#Wavelength\t\tReflectance\n')
+    np.savetxt(f, m3)
+
+#Trapazoidal integration of reference data (only need to do once for each data set)
+#Naming reference data "reference data", needs to have wavelengths and reflectance in the first and second columns, respectively
+
+ref_file = 'referencedata.txt'
+ref = np.loadtxt( ref_file ) #load reference text
+with open( 'trapazoid_' + ref_file, 'w') as f:
+    f.write('#trapazoidal\n# startwidth \t\tendwidth \t\tstartheight \t\tendheight \t\tslope \t\t\ty-intercept \t\t\tarea\n')
+    np.savetxt(f, make_traps(ref))
 
 
-model = []
-for j in range(1,100):
-    model.append([j] + [lunar.disk_e(0, j, 0, 0, 7, 15)[1]])
-m = np.asarray(model)
-print m
-plot2darray2(m, 'Phase Anglee (deg)', 'Disk Reflectance', 0.09, 0.12)
+#Find ROLO model offset from reference data
+traps = np.loadtxt('trapazoid_' + ref_file)
+Rolo  = np.loadtxt('ROLO_Results.txt')
+
+dy = []
+avg = 0
+
+for i in range(len(Rolo)):
+
+    dy.append(offset( Rolo[i], traps))
+    avg += offset( Rolo[i], traps)
+
+os = avg / len(Rolo)
+
+print('All offsets: ', dy, 'Average offset: ', os) #all offsets
+
+integrate('referencedata.txt', os)

@@ -1,0 +1,61 @@
+Questions for Lorcan:
+
+  1. Questions about technical information? (Uncertainty in satellite attitude, geometric distortions, Satellite attitude/position file format TLE)
+      On the ground 130m CE confidency for attitude
+      Measured from
+      Each pixel 0.44
+      pixel pitch 5.5 microns
+      500-450 km
+      Attitude measured in ADCS frame
+
+  2. Imaging procedure
+  3. What info to send to operations, how to schedule imaging ops
+      Worry about that after you have suite of scripts developed
+  4. Sending everything to Ian's Calibration tool?
+  5. How to analyze image? Image processing necessary? Can we run through this really fast?
+  6. Satellite attitude quanternion units? info? I assumed measured from zenith?
+  7. What happened to Planet Labs?
+      Bad business planning sorry NASA
+  8. How fast can I slew? How much time do I have? Am I taking a video or individual pictures?
+      Degree pre second for slew
+      Send attitude to mission planning in terms of inertial reference frame
+
+  9. Velocity?
+  10. Anything I should know for analytics meeting later?
+  11.
+
+  Software environment setup (Do I need ?)
+
+  Ian's focus measurement tool: in jira tasks there is info on telescope info to generate simulated imagery (hot swap stars for moon)
+
+  Keep mission as simple as possible until
+  Satellites use TLE files
+  Ian for image scheduling
+  Confluence for software best practices
+  Develop a suite of scripts
+
+Questions for Ian:
+
+  1. For lunar disks that intersect with the edges of our image - using solid angle ok?
+  2. Adding my scripts into calibration routine? I need: initialization, a way to insert lunar obs into schedule
+
+
+
+Notes:
+To Do Wed/Thurs/Fri:
+
+  1. Finish up observation window predictor
+      Wednesday
+      Using TLE files
+      Using PyEphem
+      Need to find lunar phase Calculator. found it http://www.hs.uni-hamburg.de/DE/Ins/Per/Czesla/PyA/PyA/pyaslDoc/aslDoc/moon.html
+      Thursday
+      Work out window scheme
+      do heatmap when you have time
+      Begin building final scripts
+
+  2. Build pointing instructions
+      Thursday
+      Easier than I thought, just need to send attitude requests (from inertial reference frame - Lorcan)
+  3. Start ROLO implementation
+  4. Start

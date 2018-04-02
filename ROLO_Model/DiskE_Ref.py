@@ -1,5 +1,6 @@
 #Lunar Disk Irradiance Calculator
 
+
 def lunar(date, phase, o_slon, o_slat, s_slon, band):
 
     #Here we go...
@@ -8,10 +9,12 @@ def lunar(date, phase, o_slon, o_slat, s_slon, band):
     from PyAstronomy import pyasl
 
     #Determine Lunar Phase
-    day_date = date / (3600*24) #pyasl wants it in days.....
-    mp = pyasl.moonphase(day_date) #date in Julian Date days past epoch
-#    print mp[0]*180
-    mp = phase * math.pi / (180) #test value from USGS presentation
+    #pyasl wants it in days.....
+    day_date = date / (3600*24)
+    #date in Julian Date days past epoch
+    mp = pyasl.moonphase(day_date)
+    #test value from USGS presentation
+    mp = phase * math.pi / (180) 
 
     #Lunar model constants
     c1 = 0.00034115
@@ -30,10 +33,11 @@ def lunar(date, phase, o_slon, o_slat, s_slon, band):
     for i in range(len(slines)):
         slines[i] = slines[i].split('\t')
 
-#    print slines[5]
-    i =  band #Which wavelength row
+    # print slines[5]
+    #Which wavelength row
+    i =  band
 
-    #Spectral Coefficients, sorry I used lines instead of arrays..
+    #Spectral Coefficients, sorry I used lines
     wl = float(slines[i][0]) #Wavelength (nm)
     a0 = float(slines[i][1]) # 1, Constant
     a1 = float(slines[i][2]) # g, Phase 1 (rad^-1)
@@ -58,8 +62,10 @@ def lunar(date, phase, o_slon, o_slat, s_slon, band):
 
                   asum = A0 + A1*G + A2*(G**2) + A3*(G**3)
                   bsum = B1*SUNPHI + B2*(SUNPHI**3) + B3*(SUNPHI**5)
-                  csum = C1*THETA + C2*PHi + C3*SUNPHI*THETA + C4*SUNPHI*PHi
-                  dsum = D1*math.exp(-G/P1) + D2*math.exp(-G/P2) + D3*math.cos((G-P3)/P4)
+                  csum = (C1*THETA + C2*PHi + C3*SUNPHI*THETA
+                          + C4*SUNPHI*PHi)
+                  dsum = (D1*math.exp(-G/P1) + D2*math.exp(-G/P2)
+                          + D3*math.cos((G-P3)/P4))
 
                   return float(asum + bsum + csum + dsum)
 

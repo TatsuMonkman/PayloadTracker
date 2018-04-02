@@ -1,15 +1,15 @@
 #takes in general offset and spits out trapazoidal integration of shifted reference data
 
+
 def integrate(file, offset):
+
     import numpy as np
     from find_traps import make_traps
 
 #    ref_file = '62231_avg_scaled_std_text'
 #    ref = np.loadtxt( ref_file + '.txt' )
     ref_file = file
-    ref = np.loadtxt( ref_file )
-
-
+    ref = np.loadtxt(ref_file)
 
     print ref[:,1]
 

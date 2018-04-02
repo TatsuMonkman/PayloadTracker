@@ -10,14 +10,14 @@
 def make_traps(a):
     import numpy as np
     data = []
-    for i in (range(len( a ) - 1 ) ):
+    for i in (range(len( a ) - 1 )):
         w0 = a[i][0]
         w1 = a[i+1][0]
         r0 = a[i][1]
         r1 = a[i+1][1]
-        b = ( a[i+1][1] - a[i][1] ) / ( a[i+1][0] - a[i][0] )
-        m =  ( a[i+1][1] - b * a[i+1][0])
-        A = ( ( a[i+1][1] + a[i][1] ) / 2 ) * ( a[i+1][0] - a[i][0] )
+        b = (a[i+1][1] - a[i][1])/(a[i+1][0] - a[i][0])
+        m =  (a[i+1][1] - b * a[i+1][0])
+        A = ((a[i+1][1] + a[i][1])/2)*(a[i+1][0] - a[i][0])
         data.append([w0,w1,r0,r1,b,m,A])
     return np.asarray(data)
 

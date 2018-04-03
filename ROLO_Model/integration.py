@@ -4,8 +4,19 @@
 #ref_file = '62231_avg_scaled_std_text'
 #ref = np.loadtxt( ref_file + '.txt' ) #load reference text
 
+def trap_integrate(file):
+    import numpy as np
+
+    ref = np.loadtxt(file)
+    with open('trapazoid_' + file, 'w') as f:
+        f.write('#trapazoidal\n# startwidth \t\tendwidth \t\tstartheight'
+                + '\t\tendheight \t\tslope \t\t\ty-intercept \t\t\tarea\n')
+        np.savetxt(f, make_traps(ref))
+    return
+
 def make_traps(a):
     import numpy as np
+
     data = []
     for i in (range(len( a ) - 1 )):
         w0 = a[i][0]
@@ -19,9 +30,10 @@ def make_traps(a):
     return np.asarray(data)
 
 
-def offset( targ, ref): #expects a one dimensional array for target and full list from trapazoids
-    os = 0
+def offset( targ, ref):
+    #expects a one dimensional array for target and full list from trapazoids
 
+    os = 0
     for i in range(len(ref)): #THIS SCRIPT CAN BE OPTIMIZED
         if ref[i][0] == targ[0]:
             print ref[i][0], targ[0]
@@ -40,18 +52,13 @@ def offset( targ, ref): #expects a one dimensional array for target and full lis
 
 
 def integrate(file, offset):
-
-
     import numpy as np
     from find_traps import make_traps
 
-    #    ref_file = '62231_avg_scaled_std_text'
-    #    ref = np.loadtxt( ref_file + '.txt' )
     ref_file = file
     ref = np.loadtxt(ref_file)
 
     ref[:,1] -= offset
-
 
     with open('scaled_trapazoid_' + ref_file,'w') as f:
         f.write('#scaled trapazoidal data for ' + ref_file
@@ -59,3 +66,4 @@ def integrate(file, offset):
         + ' \t\tendheight \t\tslope \t\t\ty-intercept \t\t\tarea\n')
 
         np.savetxt(f, make_traps(ref))
+    return

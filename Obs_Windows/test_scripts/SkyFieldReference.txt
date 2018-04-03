@@ -1,7 +1,0 @@
-API Reference: http://rhodesmill.org/skyfield/api.html
-API Reference - Astronomical Positions: http://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Astrometric
-API Reference - Earth Satellites: http://rhodesmill.org/skyfield/api-satellites.html#skyfield.sgp4lib.EarthSatellite
-API Reference - Astrometric Position: http://rhodesmill.org/skyfield/positions.html#astrometric-position
-
-
-curl -L https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -

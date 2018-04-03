@@ -1,6 +1,16 @@
-#GOAL: an array with columns: datetime, Sat position, Moon position, Sat in eclipse? (Y/N), Moon shot possible?
+#The two functions in this script return the positions of the sun, observer,
+#and moon relative to the earth in geocentric lat lon coordinates and finds
+#suitable observation windows based on the moon-observer-earth geometry,
+#respectively.
 
 def compute_ephem(line1, line2, line3, time, time_step):
+    #This function returns the time of the ephemeris (dtime), the ephemeris
+    #of the satellite (Sc.ra.deg, Sc.dec.deg) (RA, DEC, elevation), whether the
+    #satellite is in eclipse (e) (0=no,1=yes), the ephemeris of the moon
+    #(Mc.ra.deg, Mc.dec.deg) (RA, DEC), the ephemeris of the sun (Suc.ra.deg,
+    #Suc.dec.deg) (RA, DEC), and lunar phase (mp) (radians; 0=full, +/-pi =
+    #new). All ephemerides are given in geocentric coordinates.
+
     import numpy as np
     from datetime import datetime, timedelta
     import math
@@ -37,26 +47,31 @@ def compute_ephem(line1, line2, line3, time, time_step):
     if sat_ephem.eclipsed == True:
         e = 1
 
+    #Returnt calculated values as a 10-element list
     return([dtime, Sc.ra.deg, Sc.dec.deg, sat_ephem.elevation, e,
             Mc.ra.deg, Mc.dec.deg, Suc.ra.deg, Suc.dec.deg, mp])
 
 
 
 def FindWindows(name, tle1, tle2, date, start, stop, minstep):
+    #Given the lines of a tle (line1: name, line2: tle1, line3: tle2)
+    #a start time, stop time, and timestep (minutes) return an
+    #ephemeris / observation window array. Returned array contains all
+    #information calculated in compute_ephem for each timestep.
+
     import numpy as np
     from datetime import datetime, timedelta
     import subprocess
-    #Given a start time, stop time, and timestep (minutes)>
-    #>return an ephemeris / observation window array
 
     all = []
     good = []
     bad = []
 
+    #Find possible observation windows between start / stop dates
     for i in range(start, stop, minstep):
         pos = compute_ephem(name, tle1, tle2, date, i)
-        #Check if the moon and satellite are within 170degs of each other in RA and DEC.
-
+        #Check if the moon and satellite are within 170degs of each other in
+        #RA and DEC.
         if ((abs(pos[1] - pos[5]) < 85) and (abs(pos[2] - pos[6]) < 85)
                 and pos[4] == 1 and pos[9] <= (2)):
             print 'Yes: ', [1] + [pos[4]] + pos
@@ -103,8 +118,8 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
         f.write('#No observation-possible ephemerides over DATES\n'
                 + '#Observation possible? (0=n,1=y)\t'
                 + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft '
-                + 'Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);\tMoon'
-                + ' Dec (deg);\tLunar Phase (per/full)\n')
+                + 'Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
+                + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
         np.savetxt(f, bad)
     subprocess.call('cp '+ fname + ' noobs_times.txt', shell=True)
     subprocess.call('mv ' + fname +' ./history', shell=True)

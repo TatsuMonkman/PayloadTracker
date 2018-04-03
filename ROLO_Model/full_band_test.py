@@ -1,8 +1,8 @@
 import numpy as np
 from DiskE_Ref import lunar
-from find_traps import make_traps
-from find_offset import offset
-from integrated import integrate
+from integration import integrate
+from integration import make_traps
+from integration import offset
 
 #Run ROLO over all wavelengths for observation date, selenographic coordinates.
 #Values in lunar are assigned as follows with long and lat
@@ -30,7 +30,7 @@ ref_file = 'referencedata.txt'
 #load reference text
 ref = np.loadtxt( ref_file )
 with open('trapazoid_' + ref_file, 'w') as f:
-    f.write('#trapazoidal\n# startwidth \t\tendwidth \t\tstartheight
+    f.write('#trapazoidal\n# startwidth \t\tendwidth \t\tstartheight'
             + '\t\tendheight \t\tslope \t\t\ty-intercept \t\t\tarea\n')
     np.savetxt(f, make_traps(ref))
 

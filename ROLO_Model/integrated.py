@@ -11,12 +11,12 @@ def integrate(file, offset):
     ref_file = file
     ref = np.loadtxt(ref_file)
 
-    print ref[:,1]
-
     ref[:,1] -= offset
 
-    print ref[:, 1]
 
     with open('scaled_trapazoid_' + ref_file,'w') as f:
-        f.write('#scaled trapazoidal data for ' + ref_file +'.txt\n# startwidth \t\tendwidth \t\tstartheight \t\tendheight \t\tslope \t\t\ty-intercept \t\t\tarea\n')
+        f.write('#scaled trapazoidal data for ' + ref_file
+                + '.txt\n# startwidth \t\tendwidth \t\tstartheight'
+                + ' \t\tendheight \t\tslope \t\t\ty-intercept \t\t\tarea\n')
+
         np.savetxt(f, make_traps(ref))

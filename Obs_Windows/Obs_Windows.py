@@ -94,7 +94,7 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
                 + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft'
                 + ' Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
                 + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
-        np.savetxt(f, all)
+        np.savetxt(f, all,delimiter = '\t',fmt='%1.6f')
     subprocess.call('cp '+ fname + ' ./all_times.txt', shell=True)
     subprocess.call('mv ' + fname +' ./history', shell=True)
 
@@ -107,7 +107,7 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
                 + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft'
                 + ' Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
                 + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
-        np.savetxt(f, good)
+        np.savetxt(f, good,delimiter = '\t',fmt='%1.6f')
     subprocess.call('cp ' + fname + ' ./obs_times.txt', shell=True)
     subprocess.call('mv ' + fname +' ./history', shell=True)
 
@@ -120,6 +120,6 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
                 + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft '
                 + 'Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
                 + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
-        np.savetxt(f, bad)
+        np.savetxt(f, bad,delimiter = '\t',fmt='%1.6f')
     subprocess.call('cp '+ fname + ' noobs_times.txt', shell=True)
     subprocess.call('mv ' + fname +' ./history', shell=True)

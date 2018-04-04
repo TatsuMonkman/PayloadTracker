@@ -6,11 +6,13 @@
 #observer slat (deg), sun slat (deg))
 
 import numpy as np
+import subprocess
 from DiskE_Ref import lunar
-from integration import integrate, make_traps, offset, trap_integrate
+from integration import add_offset, make_traps, offset, trap_integrate, trap_file
 
 
-#First, this script runs ROLO over all ROLO wavelengths
+#This script runs ROLO over all ROLO wavelengths using lunar
+#Saves results to ROLO_Results.txt
 model = []
 for j in range(4,36):
     model.append(lunar(0, 7, 0, 0, 7, j))
@@ -28,8 +30,25 @@ with open('ROLO_Results.txt','w') as f:
 
 #Begin by loading and integrating the reference data
 ref_file = 'referencedata.txt'
-trap_integrate(ref_file)
+#
+trap_file(ref_file, 0, 1)
+trap_file('Solar_Spectrum.dat', 0, 1)
+trap_file('RSR_estimate.dat', 0, 11)
+subprocess.call('mv trapazoid_RSR_estimate.dat trapazoid_QER_RSR_estimate.dat', shell=True)
+trap_file('RSR_estimate.dat', 0, 12)
+subprocess.call('mv trapazoid_RSR_estimate.dat trapazoid_QEG_RSR_estimate.dat', shell=True)
+trap_file('RSR_estimate.dat', 0, 13)
+subprocess.call('mv trapazoid_RSR_estimate.dat trapazoid_QEB_RSR_estimate.dat', shell=True)
+trap_file('RSR_estimate.dat', 0, 14)
+subprocess.call('mv trapazoid_RSR_estimate.dat trapazoid_QEP_RSR_estimate.dat', shell=True)
 
+
+trap_integrate('trapazoid_Solar_Spectrum.dat', 450, 500)
+trap_integrate('trapazoid_' + ref_file, 450, 500)
+trap_integrate('trapazoid_QER_RSR_estimate.dat', 450, 500)
+trap_integrate('trapazoid_QEG_RSR_estimate.dat', 450, 500)
+trap_integrate('trapazoid_QEB_RSR_estimate.dat', 450, 500)
+trap_integrate('trapazoid_QEP_RSR_estimate.dat', 450, 500)
 
 #Find the offset of the ROLO model values from the trapazoidally
 #integrated reference data.
@@ -43,8 +62,8 @@ for i in range(len(Rolo)):
     dy.append(offset( Rolo[i], traps))
     avg += offset(Rolo[i], traps)
 
-os = avg / len(Rolo)
+offset = avg / len(Rolo)
 
-print('All offsets: ', dy, 'Average offset: ', os) #all offsets
+print('All offsets: ', dy, 'Average offset: ', offset) #all offsets
 
-integrate('referencedata.txt', os)
+add_offset('referencedata.txt', offset)

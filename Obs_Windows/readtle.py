@@ -8,6 +8,10 @@ def read(t_file):
     #read TLE File
     tle = [x for x in os.listdir('.') if x == (t_file)] #find raw tle file in directory need to turn into t_file
 
+    #find raw tle file in directory need to turn into t_file
+    if tle == []:
+        tle = [x for x in os.listdir('./reference') if x == ('testtle.tle')]
+
     if tle == []: #check if TLE file is present
         print 'TLE File named ' + t_file + ' not found'
         return

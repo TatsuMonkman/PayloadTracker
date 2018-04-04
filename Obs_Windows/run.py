@@ -13,18 +13,21 @@ from plotstuff import plot_2sets
 #Beware: newline strings often screw up TLE file readers
 #Read reads the tle file and returns a tuple with (time and [lines]):
 
-tle = read('testtle.tle')
+file = raw_input('Enter a TLE file for satellite position\nEnter \'test\' for '
+                 + 'reference/testtle.tle\nTLE:')
+
+tle = read(file)
 line1 = tle[1][0] #TLE 'title'
 line2 = tle[1][1] #TLE line 1
 line3 = tle[1][2] #TLE line 2
-tle_date = tle[0] #Date/time of TLE (Assumed UTC)
+tle_date = tle[0] #Date/time of TLE (Assumed UTC, post 2000)
 
 
 
 #Add time block to future date
-tle_date = tle_date + timedelta(weeks = 1)
+tle_date = tle_date + timedelta(weeks = 5)
 dt = 40320
-st = 10
+st = 15
 
 print('Finding Observation times between ' + tle_date.isoformat(' ') + ' and '
       + (tle_date + timedelta(minutes = dt)).isoformat(' ') + '\n')

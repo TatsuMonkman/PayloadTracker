@@ -19,7 +19,6 @@ def compute_ephem(line1, line2, line3, time, time_step):
     from astropy.coordinates import SkyCoord
 
     dt = time + timedelta(minutes = time_step)
-
     #Compute satellite and moon ephemerides
     sat_ephem = ephem.readtle(line1, line2, line3)
     sat_ephem.compute(dt)
@@ -28,11 +27,16 @@ def compute_ephem(line1, line2, line3, time, time_step):
     su = ephem.Sun(dt)
     su.compute(dt)
 
+    #Print ephemerides for manual checking.
+    #print('Moon: %s %s' % (m.g_ra, m.g_dec))
+    #print('Sun: %s %s' % (su.g_ra, su.g_dec))
+    #print('Sat: %s %s' % (sat_ephem.a_ra, sat_ephem.a_dec))
+
     #Convert ephemeris to degrees
-    Sc = SkyCoord(str(sat_ephem.ra) + ' ' + str(sat_ephem.dec),
+    Sc = SkyCoord(str(sat_ephem.a_ra) + ' ' + str(sat_ephem.a_dec),
                   unit=(u.hourangle, u.deg))
-    Mc = SkyCoord(str(m.ra) + ' ' + str(m.dec), unit=(u.hourangle, u.deg))
-    Suc = SkyCoord(str(su.ra) + ' ' + str(su.dec), unit=(u.hourangle, u.deg))
+    Mc = SkyCoord(str(m.g_ra) + ' ' + str(m.g_dec), unit=(u.hourangle, u.deg))
+    Suc = SkyCoord(str(su.g_ra) + ' ' + str(su.g_dec), unit=(u.hourangle, u.deg))
 
     #Compute lunar phase in absolute phase angle (radians)
     dtime = ephem.Date(dt)
@@ -53,7 +57,7 @@ def compute_ephem(line1, line2, line3, time, time_step):
 
 
 
-def FindWindows(name, tle1, tle2, date, start, stop, minstep):
+def FindWindows(name, tle1, tle2, date, start, stop, minstep, dt):
     #Given the lines of a tle (line1: name, line2: tle1, line3: tle2)
     #a start time, stop time, and timestep (minutes) return an
     #ephemeris / observation window array. Returned array contains all
@@ -68,6 +72,9 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
     bad = []
 
     #Find possible observation windows between start / stop dates
+    #using file io for test
+    f = open(dt + '_etimes.dat','w')
+    g = open('good_' +dt + '_etimes.dat','w')
     for i in range(start, stop, minstep):
         pos = compute_ephem(name, tle1, tle2, date, i)
         #Check if the moon and satellite are within 170degs of each other in
@@ -77,11 +84,24 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
             print 'Yes: ', [1] + [pos[4]] + pos
             good.append([1] + pos)
             all.append([1] + pos)
+            f.write('1\t')
+            g.write('1\t')
+            for j in range(len(pos)):
+                f.write(str(pos[j])+'\t')
+                g.write(str(pos[j])+'\t')
+            f.write('\n')
+            g.write('\n')
+
         else:
             print 'No: ', [0] + [pos[4]] + pos
             bad.append([0] + pos)
-            all.append([1] + pos)
-
+            all.append([0] + pos)
+            f.write('0\t')
+            for j in range(len(pos)):
+                f.write(str(pos[j])+'\t')
+            f.write('\n')
+    f.close()
+    g.close()
     #string to add to filename
     dstring = (date.isoformat(' ')[0:4] + '_' + date.isoformat(' ')[5:7]
               + '_' + date.isoformat(' ')[9:10] + '_')
@@ -90,11 +110,11 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
     all = np.asarray(all)
     fname = name + '_' + dstring + 'all_times.txt'
     with open(fname,'w') as f:
-        f.write('#All ephemerides over DATES\n#Observation possible? (0=n,1=y)'
+        f.write('#All ephemerides over DATES\n#Observation possible?\tDate\t'
                 + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft'
                 + ' Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
                 + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
-        np.savetxt(f, all,delimiter = '\t',fmt='%1.6f')
+        np.savetxt(f, all,delimiter = '\t',fmt='%1.4f')
     subprocess.call('cp '+ fname + ' ./all_times.txt', shell=True)
     subprocess.call('mv ' + fname +' ./history', shell=True)
 
@@ -102,8 +122,7 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
     good = np.asarray(good)
     fname = name + '_' + dstring + 'obs_times.txt'
     with open(fname,'w') as f:
-        f.write('#Observation-possible ephemerides over DATES\n'
-                + '#Observation possible? (0=n,1=y)\t'
+        f.write('#All ephemerides over DATES\n#Observation possible?\tDate\t'
                 + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft'
                 + ' Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
                 + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
@@ -115,10 +134,9 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep):
     bad = np.asarray(bad)
     fname = name + '_' + dstring + 'noobs_times.txt'
     with open(fname,'w') as f:
-        f.write('#No observation-possible ephemerides over DATES\n'
-                + '#Observation possible? (0=n,1=y)\t'
-                + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft '
-                + 'Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
+        f.write('#All ephemerides over DATES\n#Observation possible?\tDate\t'
+                + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft'
+                + ' Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
                 + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
         np.savetxt(f, bad,delimiter = '\t',fmt='%1.6f')
     subprocess.call('cp '+ fname + ' noobs_times.txt', shell=True)

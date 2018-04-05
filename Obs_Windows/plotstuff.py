@@ -10,6 +10,13 @@ def plot_2sets(o,n):
     ax1.scatter(o[:,8],o[:,9], s = 10, c = 'g', marker = 's', label = 'Sub-Sun Position')
     ax1.scatter(n[:,6],n[:,7], s = 10, c = 'm', marker = 's', label = 'Nonobservable Sub-Sun Position')
     ax1.scatter(o[:,6],o[:,7], s = 10, c = 'r', marker = 's', label = 'Observable Sub-Lunar Position')
+
+#    ax1.plot(n[:,2],n[:,3], c = 'b')
+#    ax1.plot(o[:,2],o[:,3], c = 'y')
+#    ax1.plot(o[:,8],o[:,9], c = 'g')
+#    ax1.plot(n[:,6],n[:,7], c = 'm')
+#    ax1.plot(o[:,6],o[:,7], c = 'r')
+
     plt.xlabel('Sub Object Longitude (deg)')
     plt.ylabel('Sub Object Latitude (deg)')
     plt.legend(loc = 'lower left')

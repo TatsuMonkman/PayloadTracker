@@ -32,7 +32,7 @@ def read(t_file):
     sc    = (((float(subdy)*24 - hr) * 60) - mn)*60
 
     #Format TLE file (need to get rid of \n at the end of each line string)
-    lines[0] = lines[0][0:-1]
+    lines[0] = lines[0][0:-1].replace(" ","")
     lines[1] = lines[1][0:-1]
     if '\n' in lines[2]:
         lines[2] = lines[2][0:-1]

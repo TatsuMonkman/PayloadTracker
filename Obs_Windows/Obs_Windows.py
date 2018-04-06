@@ -83,7 +83,8 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep, dt):
         #Check if the moon and satellite are within 170degs of each other in
         #RA and DEC.
         if ((abs(pos[1] - pos[5]) < 85) and (abs(pos[2] - pos[6]) < 85)
-                and pos[4] == 1 and pos[9] <= (2)):
+                and pos[4] == 1
+                and pos[9] <= (2)):
             print 'Yes: ', [1] + [pos[4]] + pos
             good.append([1] + pos)
             all.append([1] + pos)
@@ -110,42 +111,20 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep, dt):
     g.close()
     b.close()
 
-    #string to add to filename
-    dstring = (date.isoformat(' ')[0:4] + '_' + date.isoformat(' ')[5:7]
-              + '_' + date.isoformat(' ')[9:10] + '_')
-
-    #'all' is an array of all ephemerides
-    all = np.asarray(all)
-    fname = name + '_' + dstring + 'all_times.txt'
-    with open(fname,'w') as f:
-        f.write('#All ephemerides over DATES\n#Observation possible?\tDate\t'
-                + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft'
-                + ' Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
-                + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
-        np.savetxt(f, all,delimiter = '\t',fmt='%1.4f')
-    subprocess.call('cp '+ fname + ' ./all_times.txt', shell=True)
-    subprocess.call('mv ' + fname +' ./history', shell=True)
-
-    #'good' is an array of possible observation opportunities.
-    good = np.asarray(good)
-    fname = name + '_' + dstring + 'obs_times.txt'
-    with open(fname,'w') as f:
-        f.write('#All ephemerides over DATES\n#Observation possible?\tDate\t'
-                + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft'
-                + ' Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
-                + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
-        np.savetxt(f, good,delimiter = '\t',fmt='%1.6f')
-    subprocess.call('cp ' + fname + ' ./obs_times.txt', shell=True)
-    subprocess.call('mv ' + fname +' ./history', shell=True)
-
-    #'bad' is an array of all other sun-moon-satellite ephemerides.
-    bad = np.asarray(bad)
-    fname = name + '_' + dstring + 'noobs_times.txt'
-    with open(fname,'w') as f:
-        f.write('#All ephemerides over DATES\n#Observation possible?\tDate\t'
-                + 'Spacecraft RA (deg);\t\tSpacecraft DEC (deg);\tSpacecraft'
-                + ' Elevation (?);\tIn Eclipse? (no=0,yes=1);\tMoon RA (deg);'
-                + '\tMoon Dec (deg);\tLunar Phase (per/full)\n')
-        np.savetxt(f, bad,delimiter = '\t',fmt='%1.6f')
-    subprocess.call('cp '+ fname + ' noobs_times.txt', shell=True)
-    subprocess.call('mv ' + fname +' ./history', shell=True)
+def readet(file):
+    from datetime import datetime, timedelta
+    import numpy as np
+    #This script pull ephemerides from *etimes.dat files and
+    #convert them into arrays suitable for matplotlib.
+    obs = []
+    with open(file, 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            a = line.split()
+            fl = a[3:12]
+            fl = [float(i) for i in fl]
+            obs.append([float(a[0])]
+                        + [datetime.strptime(a[1]+a[2], '%Y/%m/%d%H:%M:%S')]
+                        + fl)
+    obs = np.asarray(obs)
+    return obs

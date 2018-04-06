@@ -70,7 +70,7 @@ def dayrun(tle, line1, line2, line3, tle_date, tdelta):
 
     FindWindows(line1,line2, line3, tle_date, 0, dt, st, 'day')
 
-    subprocess.call('cp day_etimes.dat ' + line1 + '_day_etimes_'
+    subprocess.call('cp ' + line1 + '_day_etimes.dat ' + line1 + '_day_etimes_'
                     + tle_date.isoformat('-')[0:9] + '_to_'
                     + (tle_date + timedelta(minutes = dt)).isoformat('-')[0:9]
                     + '.dat', shell = True)
@@ -168,5 +168,5 @@ rline2 = rtle[1][1] #TLE line 1
 rline3 = rtle[1][2] #TLE line 2
 rtle_date = rtle[0] #Date/time of TLE (Assumed UTC, post 2000)
 
-#o = dayrun(rtle, rline1, rline2, rline3, rtle_date, 0)
-monthrun(rtle, rline1, rline2, rline3, rtle_date, 0)
+o = dayrun(rtle, rline1, rline2, rline3, rtle_date, 0)
+#monthrun(rtle, rline1, rline2, rline3, rtle_date, 0)

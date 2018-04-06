@@ -35,8 +35,10 @@ def compute_ephem(line1, line2, line3, time, time_step):
     #Convert ephemeris to degrees
     Sc = SkyCoord(str(sat_ephem.a_ra) + ' ' + str(sat_ephem.a_dec),
                   unit=(u.hourangle, u.deg))
-    Mc = SkyCoord(str(m.g_ra) + ' ' + str(m.g_dec), unit=(u.hourangle, u.deg))
-    Suc = SkyCoord(str(su.g_ra) + ' ' + str(su.g_dec), unit=(u.hourangle, u.deg))
+    Mc = SkyCoord(str(m.g_ra) + ' ' + str(m.g_dec),
+                  unit=(u.hourangle, u.deg))
+    Suc = SkyCoord(str(su.g_ra) + ' ' + str(su.g_dec),
+                   unit=(u.hourangle, u.deg))
 
     #Compute lunar phase in absolute phase angle (radians)
     dtime = ephem.Date(dt)
@@ -73,8 +75,9 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep, dt):
 
     #Find possible observation windows between start / stop dates
     #using file io for test
-    f = open(dt + '_etimes.dat','w')
-    g = open('good_' +dt + '_etimes.dat','w')
+    f = open(name + '_' + dt + '_etimes.dat','w')
+    g = open(name + '_good_' + dt + '_etimes.dat','w')
+    b = open(name + '_bad_' + dt + '_etimes.dat','w')
     for i in range(start, stop, minstep):
         pos = compute_ephem(name, tle1, tle2, date, i)
         #Check if the moon and satellite are within 170degs of each other in
@@ -97,11 +100,16 @@ def FindWindows(name, tle1, tle2, date, start, stop, minstep, dt):
             bad.append([0] + pos)
             all.append([0] + pos)
             f.write('0\t')
+            b.write('0\t')
             for j in range(len(pos)):
                 f.write(str(pos[j])+'\t')
+                b.write(str(pos[j])+'\t')
             f.write('\n')
+            b.write('\n')
     f.close()
     g.close()
+    b.close()
+
     #string to add to filename
     dstring = (date.isoformat(' ')[0:4] + '_' + date.isoformat(' ')[5:7]
               + '_' + date.isoformat(' ')[9:10] + '_')

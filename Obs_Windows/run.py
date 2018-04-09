@@ -59,7 +59,7 @@ def monthrun(tle, line1, line2, line3, tle_date, tdelta):
               + 'UST at ' + str(st) + ' min step intervals\n\n')
         return 'NA'
     else:
-        plot_2sets(obs,nobs)
+        plot_2sets(obs,nobs,line1)
 
 
 #dayrun() generates a low resolution (time step = 10 min) forecast of
@@ -98,7 +98,7 @@ def dayrun(tle, line1, line2, line3, tle_date, tdelta):
               + 'UST at ' + str(st) + ' min step intervals\n\n')
         return 'NA'
     else:
-        plot_2sets(obs,nobs)
+        plot_2sets(obs,nobs,line1)
 
 
 
@@ -110,7 +110,7 @@ def check(file):
     rline2 = rtle[1][1] #TLE line 1
     rline3 = rtle[1][2] #TLE line 2
     rtle_date = rtle[0] #Date/time of TLE (Assumed UTC, post 2000)
-    rtle_date = rtle_date + timedelta(weeks = 0)
+    rtle_date = rtle_date + timedelta(weeks = 1)
 
     #d1 and d2 are the start and stop times of the current 24hour mission plan
     d1 = rtle_date + timedelta(minutes = 10)
@@ -132,11 +132,13 @@ def check(file):
         pass
     else:
         raw_input('\'./' + rline1 + '_good_month_forecast.dat\' '
-                  + 'DOES NOT EXIST\n Create new forecast? ')
+                  + 'DOES NOT EXIST\n Create new 4-week forecast? ')
         monthrun(rtle, rline1, rline2, rline3, rtle_date, 0)
 
     #The script checks the current month-long forecast to see whether there
     #are any observation windows in the coming 24 hr time period.
+    print('Checking 4-week forecast for observation windows in the next '
+          + '24 hours.\n')
     with open(rline1 + '_good_month_forecast.dat','r') as f:
         for line in f:
             line = line.split()
@@ -184,7 +186,7 @@ def check(file):
         #File is closed here
 
     if j == 0:
-        raw_input('No obs times found later this month. Calculating over next '
+        raw_input('\nNo obs times found later this month. Calculating over next '
                   + 'four week period. Continue? ')
         monthrun(rtle, rline1, rline2, rline3, rtle_date, 0)
 

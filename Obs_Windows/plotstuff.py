@@ -1,16 +1,16 @@
 
-def plot_2sets(o,n):
+def plot_2sets(o,n,name):
     import matplotlib.pyplot as plt
     import numpy as np
 
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    ax1.scatter(n[:,2],n[:,3], s = 10, c = 'b', marker = 's')
-    ax1.scatter(o[:,2],o[:,3], s = 10, c = 'y', marker = 's', label = 'Observation Window')
-    ax1.scatter(o[:,8],o[:,9], s = 10, c = 'g', marker = 's', label = 'Sub-Sun Position')
+    ax1.scatter(n[:,2],n[:,3], s = 10, c = 'b', marker = 's', label = name + ' Position')
+    ax1.scatter(o[:,2],o[:,3], s = 10, c = 'y', marker = 's', label = name + ' Position at Observation Window')
+    ax1.scatter(o[:,8],o[:,9], s = 10, c = 'g', marker = 's', label = 'Sun Position')
     ax1.scatter(n[:,8],n[:,9], s = 10, c = 'g', marker = 's')
-    ax1.scatter(n[:,6],n[:,7], s = 10, c = 'm', marker = 's', label = 'Nonobservable Sub-Lunar Position')
-    ax1.scatter(o[:,6],o[:,7], s = 10, c = 'r', marker = 's', label = 'Observable Sub-Lunar Position')
+    ax1.scatter(n[:,6],n[:,7], s = 10, c = 'm', marker = 's', label = 'Nonobservable Lunar Position')
+    ax1.scatter(o[:,6],o[:,7], s = 10, c = 'r', marker = 's', label = 'Observable Lunar Position')
 
 #    ax1.plot(n[:,2],n[:,3], c = 'b')
 #    ax1.plot(o[:,2],o[:,3], c = 'y')
@@ -21,7 +21,7 @@ def plot_2sets(o,n):
     plt.xlabel('Object Right Ascension (deg)')
     plt.ylabel('Object Declination (deg)')
     plt.legend(loc = 'lower left')
-    plt.title('Observation Windows for Payload With Eclipse Preference')
+    plt.title('Observation Windows for ' + name + ' With Eclipse Preference')
 
     plt.grid(True)
     plt.show()

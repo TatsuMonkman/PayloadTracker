@@ -1,25 +1,31 @@
+#This script multiplies the RSR by the Solar spectral irradiance for each
+#corresponding wavelenth band.
+
+#Trapazoidal data sets are organized as follows:
+#startwidth, endwidth, startheight, endheight, slope, y-intercept, area
 import numpy as np
 
 with open('trapazoid_Solar_Spectrum.dat', 'r') as f:
     sol = np.genfromtxt(f)
 
-with open('RSR_spec.dat', 'r') as f:
+with open('RSR_estimate.dat', 'r') as f:
     rsr = np.genfromtxt(f)
-
-print sol
-print rsr
 
 prod = []
 
-
 for i in range(len(rsr)):
     for j in range(len(sol)):
-        if sol[j][0] <= rsr[i][0] <= sol[j+1][0]:
+        if sol[j][0] == rsr[i][0]:
             y = sol[j][4]*rsr[i][0] + sol[j][5]
-            prod.append([rsr[i][0],rsr[i][1],sol[j][0],sol[j][2],
-                        sol[j][4],y,rsr[i][1]*y])
+            prod.append([rsr[i][0],rsr[i][9]*y,rsr[i][10]*y,
+                        rsr[i][11]*y,rsr[i][12]*y])
+            pass
+        elif sol[j][0] < rsr[i][0] < sol[j+1][0]:
+            y = sol[j][4]*rsr[i][0] + sol[j][5]
+            prod.append([rsr[i][0],rsr[i][9]*y,rsr[i][10]*y,
+                        rsr[i][11]*y,rsr[i][12]*y])
+            pass
 
-print np.asarray(prod)
 #print sol[1]
 #print prod[1]
 #print prod[2]
@@ -27,5 +33,4 @@ print np.asarray(prod)
 
 with open('combined_spectrum.dat','w') as f:
     f.write('#wl\tirradiance*RSR\n')
-    for i in range(len(prod)):
-        f.write(str(prod[i][0]) + '\t' + str(prod[i][6]) + '\n')
+    np.savetxt(f,prod)

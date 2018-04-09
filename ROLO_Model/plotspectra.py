@@ -38,6 +38,7 @@ with open('trapazoid_RSR_estimate.dat','r') as f:
 
 with open('trapazoid_Combined_Spectrum.dat','r') as f:
     com = np.genfromtxt(f)
+    
 print sol[0]
 print ref[0]
 print rsr[0]

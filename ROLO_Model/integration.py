@@ -4,15 +4,20 @@
 #ref_file = '62231_avg_scaled_std_text'
 #ref = np.loadtxt( ref_file + '.txt' ) #load reference text
 
-def trap_file(file, co1, co2):
+
+def trap_file(file, newfile, xcol, ycol):
+    #This function reads in column data from a file (called *FILENAME*)
+    #and creates a series of trapazoids using
+    #make_traps and writes them to a file called trapazoid_*FILENAME*.
     import numpy as np
 
     ref = np.loadtxt(file)
-    with open('trapazoid_' + file, 'w') as f:
+    with open(newfile, 'w') as f:
         f.write('#trapazoidal\n# startwidth \t\tendwidth \t\tstartheight'
                 + '\t\tendheight \t\tslope \t\t\ty-intercept \t\t\tarea\n')
-        np.savetxt(f, make_traps(ref, co1, co2))
+        np.savetxt(f, make_traps(ref, xcol, ycol))
     return
+
 
 def make_traps(a, c1, c2):
     #This script takes in set of xy positions and returns a set of
@@ -32,10 +37,12 @@ def make_traps(a, c1, c2):
         w1 = a[i+1][c1]  #end x-value
         r0 = a[i][c2]    #start height
         r1 = a[i+1][c2]  #end height
-        b = (a[i+1][c2] - a[i][c2])/(a[i+1][c1] - a[i][c1])     #slope
-        m =  (a[i+1][c2] - b*a[i+1][c1])                      #y-intercept
-        A = ((a[i+1][c1] + a[i][c2])/2)*(a[i+1][c1] - a[i][c1]) #trapazoid area
+#        print i, a[i+1][c1] - a[i][c1]
+        b  = (a[i+1][c2] - a[i][c2])/(a[i+1][c1] - a[i][c1])    #slope
+        m  = (a[i+1][c2] - b*a[i+1][c1])                        #y-intercept
+        A  = ((r1 + r0)/2)*(w1 - w0)                            #trapazoid area
         data.append([w0,w1,r0,r1,b,m,A])
+
     return np.asarray(data)
 
 
@@ -87,30 +94,9 @@ def trap_integrate(file, xmin, xmax):
     #Col0 startx; Col1 endx; Col2 starty; Col3 endy, Col4 slope,
     #Col5 y-intercept, Col6 area
     import numpy as np
-
-    ref = np.loadtxt(file)
+    ref = np.genfromtxt(file)
     a = 0.0
-
     for i in range(len(ref)):
-        if  ref[i][0] <= xmin <= ref[i+1][0]:
-            #Calculate area of xmin to ref[i+1] rombus
-            y1 = ref[i][4]*xmin + ref[i][5]
-            a1 = ((y1 + ref[i][4])/2)*abs(ref[i][1]-xmin)
-            a += a1
-            m = i
-            break
-        else:
-            pass
-
-    for j in range(m,len(ref)):
-        if ref[j][0] <= xmax <= ref[j+1][0]:
-            #Calculate area of ref[j] to xmax rombus
-            y2 = ref[j][4]*xmax + ref[j][5]
-            a2 = ((y2 + ref[j][3])/2)*abs(xmax - ref[j][0])
-            a += a2
-            break
-        elif xmax <= ref[j][0]:
-            a += ref[j][6]
-            pass
-
+        if xmin <= ref[i][0] < xmax:
+            a += ref[i][6]
     print file +' TOTAL AREA : ', a,file

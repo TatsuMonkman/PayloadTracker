@@ -100,21 +100,3 @@ def trap_integrate(file, xmin, xmax):
         if xmin <= ref[i][0] < xmax:
             a += ref[i][6]
     print file +' TOTAL AREA : ', a,file
-
-#trap_file('Solar_Spectrum.dat', 'trapazoid_Solar_Spectrum.dat', 0, 1)
-#trap_file('RSR_estimate.dat', 'trapazoid_r_RSR_estimate.dat', 0, 9)
-#trap_file('RSR_estimate.dat', 'trapazoid_g_RSR_estimate.dat', 0, 10)
-#trap_file('RSR_estimate.dat', 'trapazoid_b_RSR_estimate.dat', 0, 11)
-#trap_file('RSR_estimate.dat', 'trapazoid_p_RSR_estimate.dat', 0, 12)
-#trap_file('combined_spectrum.dat', 'trapazoid_r_combined_spectrum.dat', 0, 1)
-#trap_file('combined_spectrum.dat', 'trapazoid_g_combined_spectrum.dat', 0, 2)
-#trap_file('combined_spectrum.dat', 'trapazoid_b_combined_spectrum.dat', 0, 3)
-#trap_file('combined_spectrum.dat', 'trapazoid_p_combined_spectrum.dat', 0, 4)
-trap_integrate('trapazoid_r_RSR_estimate.dat', 400, 800)
-trap_integrate('trapazoid_g_RSR_estimate.dat', 400, 800)
-trap_integrate('trapazoid_b_RSR_estimate.dat', 400, 800)
-trap_integrate('trapazoid_p_RSR_estimate.dat', 400, 800)
-trap_integrate('trapazoid_r_combined_spectrum.dat', 400, 800)
-trap_integrate('trapazoid_g_combined_spectrum.dat', 400, 800)
-trap_integrate('trapazoid_b_combined_spectrum.dat', 400, 800)
-trap_integrate('trapazoid_p_combined_spectrum.dat', 400, 800)

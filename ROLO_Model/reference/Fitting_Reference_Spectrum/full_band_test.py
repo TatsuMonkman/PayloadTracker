@@ -26,6 +26,25 @@ with open('ROLO_Results.txt','w') as f:
 #in the first and second columns, respectively.
 
 #Begin by loading and integrating the reference data
-ref_file = 'ROLO_Results.txt'
+ref_file = 'mixed_spectrum.txt'
 trap_file(ref_file, 'trapazoid_' + ref_file, 0, 1)
-trap_integrate('trapazoid_' + ref_file, 350, 800)
+trap_integrate('trapazoid_' + ref_file, 400, 800)
+
+#Find the offset of the ROLO model values from the trapazoidally
+#integrated reference data.
+traps = np.loadtxt('trapazoid_' + ref_file)
+Rolo  = np.loadtxt('ROLO_Results.txt')
+
+plot_cols('62231_avg_scaled_std_text.txt', 0, 1, '67455_ls-CMP-10.dat', 0, 1,
+           'ROLO_Results.txt', 0, 1)
+
+myrolo = np.genfromtxt('ROLO_Results.txt')
+Stonerolo = np.genfromtxt('Stone_ROLO_results.dat')
+mixspec = np.genfromtxt('mixed_spectrum.txt')
+
+#Need to add a scaling algorithm here
+
+#Integrating using derived values for now...
+scale_file = 'Stone_scaled.dat'
+trap_file(scale_file, 'trapazoid_' + scale_file, 0, 3)
+trap_integrate('trapazoid_' + scale_file, 400, 800)

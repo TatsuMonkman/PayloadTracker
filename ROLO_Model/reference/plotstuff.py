@@ -2,12 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def plot_cols(file1, xcol1, ycol1, file2, xcol2, ycol2, file3, xcol3, ycol3,
-              file4, xcol4, ycol4):
+              file4, xcol4, ycol4, file5, xcol5, ycol5):
 
     a = np.genfromtxt(file1)
     b = np.genfromtxt(file2)
     c = np.genfromtxt(file3)
     d = np.genfromtxt(file4)
+    e = np.genfromtxt(file5)
 
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
@@ -20,6 +21,8 @@ def plot_cols(file1, xcol1, ycol1, file2, xcol2, ycol2, file3, xcol3, ycol3,
 #    ax1.plot(c[:,0], c[:,1], c = 'b')
     ax1.scatter(d[:,0]*1000, d[:,1], s = 10, c = 'r', marker = 'o', label = 'Norite Powder')
     ax1.plot(d[:,0], d[:,1], c = 'r')
+    ax1.scatter(e[:,0], e[:,1], s = 10, c = 'y', marker = 'o', label = 'ROLO Model')
+    ax1.plot(e[:,0], e[:,1], c = 'y')
 
     ax1.scatter(b[:,0], (d[:,1]*0.05) + (b[:,1]*0.95), s = 10, c = 'm', marker = 'o', label = 'Mix')
     ax1.plot(b[:,0], (d[:,1]*0.05) + (b[:,1]*0.95), c = 'm')
@@ -36,4 +39,5 @@ def plot_cols(file1, xcol1, ycol1, file2, xcol2, ycol2, file3, xcol3, ycol3,
 
 
 plot_cols('67455_ls-CMP-25.dat', 0, 1, '62231_avg_scaled_std_text.txt',
-           0, 1, '67455_ls-CMP-171.dat', 0, 1,'67455_ls-CMP-10.dat', 0, 1)
+           0, 1, '67455_ls-CMP-171.dat', 0, 1,'67455_ls-CMP-10.dat', 0, 1,
+           'ROLO_Results.txt',0,1)

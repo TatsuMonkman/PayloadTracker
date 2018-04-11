@@ -68,5 +68,5 @@ def plot_compare(file1, xcol1, ycol1, file2, xcol2, ycol2, file3, xcol3, ycol3):
 
 #plot_compare('VIIRS_2014_ROLO_Results.txt',0,1,'Aqua_2002_ROLO_Results.txt',0,1,
 #             'Aqua_2002_ROLO_Results.txt',0,1)
-#plot_compare('ROLO_Results.txt',0,1,'Stone_ROLO_results.dat',0,1,
-#             'Aqua_2002_ROLO_Results.txt',0,1)
+plot_compare('ROLO_Results.txt',0,1,'Stone_ROLO_results.dat',0,1,
+             'Aqua_2002_ROLO_Results.txt',0,1)

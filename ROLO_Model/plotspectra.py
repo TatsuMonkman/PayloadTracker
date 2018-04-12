@@ -1,46 +1,47 @@
 import numpy as np
 
-def plot_sets(a,b,c,d):
+def plot_sets(a,b,c,d,e):
     import matplotlib.pyplot as plt
     import numpy as np
 
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    ax1.scatter(a[:,0],a[:,6], s = 10, c = 'r', marker = 'o', label = 'Reference Lunar Albedo')
-    ax1.scatter(b[:,0],b[:,6], s = 10, c = 'g', marker = 'o', label = 'Solar Irradiance')
-    ax1.scatter(c[:,0],c[:,6], s = 10, c = 'b', marker = 'o', label = 'RSR')
-    ax1.scatter(d[:,0],d[:,6], s = 10, c = 'm', marker = 'o', label = 'Solar/RSR Combined')
+#    ax1.scatter(a[:,0],a[:,2], s = 10, c = 'r', marker = 'o', label = 'r combined')
+#    ax1.scatter(b[:,0],b[:,2], s = 10, c = 'g', marker = 'o', label = 'g combined')
+#    ax1.scatter(c[:,0],c[:,2], s = 10, c = 'b', marker = 'o', label = 'b combined')
+#    ax1.scatter(d[:,0],d[:,2], s = 10, c = '0.75', marker = 'o', label = 'p combined')
+    ax1.scatter(e[:,0],e[:,2], s = 10, c = 'y', marker = 'o', label = 'ROLO Model')
 
-    ax1.plot(a[:,0],a[:,6], c = 'r')
-    ax1.plot(b[:,0],b[:,6], c = 'g')
-    ax1.plot(c[:,0],c[:,6], c = 'b')
-    ax1.plot(d[:,0],d[:,6], c = 'm')
+#    ax1.plot(a[:,0],a[:,2], c = 'r')
+#    ax1.plot(b[:,0],b[:,2], c = 'g')
+#    ax1.plot(c[:,0],c[:,2], c = 'b')
+#    ax1.plot(d[:,0],d[:,2], c = '0.75')
+    ax1.plot(e[:,0],e[:,2], c = 'y')
+    ax1.set_yscale('log')
 
     plt.xlabel('Wavelength (nm)')
-    plt.ylabel('Quantities')
+    plt.ylabel('Reflectance')
     plt.legend(loc = 'upper left')
-    plt.title('Quantities vs Wavelength')
+    plt.title('Reflectance vs Wavelength')
     plt.xlim(xmin = 300, xmax = 1050)
-    plt.ylim(ymin = 0, ymax = 1000)
     plt.grid(True)
     plt.show()
 
 
 
-with open('trapazoid_referencedata.txt','r') as f:
-    ref = np.genfromtxt(f)
+#with open('trapazoid_r_AkSolRSR_combined_spectrum.dat','r') as f:
+#    r_trap = np.genfromtxt(f)
 
-with open('trapazoid_Solar_Spectrum.dat','r') as f:
-    sol = np.genfromtxt(f)
+#with open('trapazoid_b_AkSolRSR_combined_spectrum.dat','r') as f:
+#    b_trap = np.genfromtxt(f)
 
-with open('trapazoid_RSR_estimate.dat','r') as f:
-    rsr = np.genfromtxt(f)
+#with open('trapazoid_g_AkSolRSR_combined_spectrum.dat','r') as f:
+#    g_trap = np.genfromtxt(f)
 
-with open('trapazoid_Combined_Spectrum.dat','r') as f:
-    com = np.genfromtxt(f)
-    
-print sol[0]
-print ref[0]
-print rsr[0]
-print com[0]
-plot_sets(ref,sol,rsr,com)
+#with open('trapazoid_p_AkSolRSR_combined_spectrum.dat','r') as f:
+#    p_trap = np.genfromtxt(f)
+
+#with open('trapazoid_ROLO_Results.dat', 'r') as f:
+#    ROLO_trap = np.genfromtxt(f)
+
+#plot_sets(r_trap,b_trap,g_trap,p_trap,ROLO_trap)

@@ -1,7 +1,6 @@
 #Lunar Disk Irradiance Calculator
 
-
-def lunar(date, phase, o_slon, o_slat, s_slon, band):
+def lunar(date, o_slon, o_slat, s_slon, band):
 
     #Here we go...
     import math
@@ -14,7 +13,7 @@ def lunar(date, phase, o_slon, o_slat, s_slon, band):
     #date in Julian Date days past epoch
     mp = pyasl.moonphase(day_date)
     #test value from USGS presentation
-    mp = phase * math.pi / (180)
+#    mp = 7. * math.pi / (180)
 
     #Lunar model constants
     c1 = 0.00034115
@@ -50,11 +49,15 @@ def lunar(date, phase, o_slon, o_slat, s_slon, band):
     d2 = float(slines[i][9]) # e^(-g/p2), Exponent 2
     d3 = float(slines[i][10]) # cos[(g-p3)/p4], Exponent 3
 
-    #Variables
-    g = mp #Absolute phase angle
-    theta = o_slat * math.pi / (180 ) #selenographic latitude of sub-observer point, degs to rads
-    phi = o_slon * math.pi / (180 ) #Selenographic longitude of sub-observer point, degs to rads
-    PHI = s_slon * math.pi / (180 ) #Selenographic longitude of the Sun, degs to rads
+    #Variables:
+    #Absolute phase angle
+    g = mp
+    #Selenographic latitude of sub-observer point, degs to rads
+    theta = o_slat * math.pi / (180)
+    #Selenographic longitude of sub-observer point, degs to rads
+    phi = o_slon * math.pi / (180)
+    #Selenographic longitude of the Sun, degs to rads
+    PHI = s_slon * math.pi / (180)
 
     def diskequiv(C1, C2, C3, C4, P1, P2, P3, P4, WL, A0,
                   A1, A2, A3, B1, B2, B3, D1, D2, D3, G,
@@ -75,6 +78,3 @@ def lunar(date, phase, o_slon, o_slat, s_slon, band):
 
     print('Wavelength: ', wl, '\nReflectance: ', math.exp(Ak))
     return [wl, math.exp(Ak)]
-
-#disk_e(575372835.433, 0, 0, 7, 22)
-#ef disk_eradiance(date, phase, o_slon, o_slat, s_slon):

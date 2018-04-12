@@ -1,9 +1,6 @@
 #Find inter-point trapazoids for trapazoidal integration and function - data
 #Technically only need to do one time once reference data is determined
 
-#ref_file = '62231_avg_scaled_std_text'
-#ref = np.loadtxt( ref_file + '.txt' ) #load reference text
-
 def trap_file(file, newfile, xcol, ycol):
     #This function reads in column data from a file (called *FILENAME*)
     #and creates a series of trapazoids using
@@ -18,6 +15,7 @@ def trap_file(file, newfile, xcol, ycol):
     return
 
 
+
 def make_traps(a, c1, c2):
     #This script takes in set of xy positions and returns a set of
     #trapazoids between points with adjacent x positions
@@ -28,7 +26,6 @@ def make_traps(a, c1, c2):
     import numpy as np
 
     data = []
-
     for i in (range(len( a ) - 1)):
         #Dimensions of each derived trapazoid (angled side is given by
         #a linear function in x)
@@ -36,14 +33,11 @@ def make_traps(a, c1, c2):
         w1 = a[i+1][c1]  #end x-value
         r0 = a[i][c2]    #start height
         r1 = a[i+1][c2]  #end height
-#        print i, a[i+1][c1] - a[i][c1]
         b  = (a[i+1][c2] - a[i][c2])/(a[i+1][c1] - a[i][c1])    #slope
         m  = (a[i+1][c2] - b*a[i+1][c1])                        #y-intercept
         A  = ((r1 + r0)/2)*(w1 - w0)                            #trapazoid area
         data.append([w0,w1,r0,r1,b,m,A])
-
     return np.asarray(data)
-
 
 
 
@@ -52,9 +46,38 @@ def trap_integrate(file, xmin, xmax):
     #Col0 startx; Col1 endx; Col2 starty; Col3 endy, Col4 slope,
     #Col5 y-intercept, Col6 area
     import numpy as np
+
     ref = np.genfromtxt(file)
-    a = 0.0
+    ta = 0.0
     for i in range(len(ref)):
-        if xmin <= ref[i][0] < xmax:
-            a += ref[i][6]
-    print file +' TOTAL AREA : ', a,file
+        #Special case for when the xmin and xmax fall in between
+        #the same two reference data points
+        if (ref[i][1] > xmax) and (ref[i][1] > xmin >= ref[i][0]):
+            m = ref[i][4]
+            b = ref[i][5]
+            ymin = m*xmin + b
+            ymax = m*xmax + b
+            ta += ((ymax + ymin)/2)*(xmax - xmin)
+            break
+        #Case for when xmax is one or more data points higher than
+        #xmin
+        elif ref[i][1] > xmin >= ref[i][0]:
+            m = ref[i][4]
+            b = ref[i][5]
+            y = m*xmin + b
+            ta += ((y + ref[i][3])/2)*(ref[i][1] - xmin)
+            break
+    for j in range(i+1, len(ref)):
+        if xmax > ref[j][1]:
+            ta += ref[j][6]
+        elif ref[j][0] < xmax <= ref[j][1]:
+            m = ref[j][4]
+            b = ref[j][5]
+            y = m*xmax + b
+            ta += ((y + ref[j][2])/2)*(xmax - ref[j][0])
+            break
+
+    print file +' TOTAL AREA : ', ta,file
+    return ta
+
+#trap_integrate('testtrap.txt',1.1,1.9)
